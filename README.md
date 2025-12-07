@@ -3,6 +3,7 @@
 A minimal Task management web app built with Next.js — clean auth pages and a simple task CRUD interface.
 
 ## Quick start
+<img width="1898" height="852" alt="image" src="https://github.com/user-attachments/assets/dbd625ba-1422-4bff-937d-c402604d377e" />
 
 These steps get the app running locally.
 
