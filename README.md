@@ -14,13 +14,15 @@ cd c:\Users\HP\OneDrive\Desktop\task-tracker
 npm install
 ```
 
-3. Copy environment variables (create `.env.local` in project root) — at minimum:
+3. Copy environment variables (create `.env.local` in project root):
 
 ```
-# Example .env.local
-NEXT_PUBLIC_API_BASE=/api
-# any other variables your API needs (e.g. DB connection) go here
+MONGO_URI=mongodb+srv://your_username:your_password@your_cluster.mongodb.net/your_db
+JWT_SECRET=your_secret_key_here
+URL=http://localhost:3000
 ```
+
+Contact the team for the actual credentials, or set up your own MongoDB Atlas cluster.
 
 4. Run the development server:
 
