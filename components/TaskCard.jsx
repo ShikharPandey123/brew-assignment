@@ -9,6 +9,8 @@ const TaskCard = ({ task }) => {
   const router = useRouter();
 
   const deleteTask = async () => {
+    if (!confirm("Are you sure you want to delete this task?")) return;
+    
     try {
       const res = await fetch(`/api/task/${task._id}`, { method: "DELETE" });
       const data = await res.json();
@@ -22,6 +24,18 @@ const TaskCard = ({ task }) => {
     }
   };
 
+  const statusEmoji = {
+    "todo": "📋",
+    "in-progress": "⏳",
+    "done": "✅"
+  };
+
+  const priorityEmoji = {
+    "low": "🟢",
+    "medium": "🟡",
+    "high": "🔴"
+  };
+
   return (
     <div className="task-card">
       <div className="task-title">{task.title}</div>
@@ -31,25 +45,27 @@ const TaskCard = ({ task }) => {
       )}
 
       <div className="meta-row">
-        <span className={`badge status-${task.status}`}>{task.status}</span>
+        <span className={`badge status-${task.status}`}>
+          {statusEmoji[task.status]} {task.status}
+        </span>
         <span className={`badge priority-${task.priority}`}>
-          {task.priority}
+          {priorityEmoji[task.priority]} {task.priority}
         </span>
 
         {task.dueDate && (
           <span className="due-date">
-            Due: {new Date(task.dueDate).toLocaleDateString()}
+            📅 Due: {new Date(task.dueDate).toLocaleDateString()}
           </span>
         )}
       </div>
 
       <div className="actions">
         <Link href={`/edit/${task._id}`}>
-          <button className="edit-btn">Edit</button>
+          <button className="edit-btn">✏️ Edit</button>
         </Link>
 
         <button className="delete-btn" onClick={deleteTask}>
-          Delete
+          🗑️ Delete
         </button>
       </div>
     </div>

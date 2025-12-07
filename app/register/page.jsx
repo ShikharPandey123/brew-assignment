@@ -1,20 +1,37 @@
 "use client";
 
+import "../../styles/login.scss";
 import Link from "next/link";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Context } from "../../components/Clients";
-import { redirect } from "next/navigation";
-import axios from "axios";
+import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import axios from "axios";
 
 const RegisterPage = () => {
-  const { user, setUser } = useContext(Context);
+  const { user, setUser, loading } = useContext(Context);
+  const router = useRouter();
+  
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const registerHandler = async (e) => {
+  useEffect(() => {
+    if (user && !loading) {
+      router.push("/");
+    }
+  }, [user, loading, router]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+
+    setIsLoading(true);
 
     try {
       const { data } = await axios.post("/api/auth/register", {
@@ -24,55 +41,93 @@ const RegisterPage = () => {
       });
 
       if (!data.success) {
-        return toast.error(data.error || data.message);
+        toast.error(data.error || data.message || "Registration failed");
+        setIsLoading(false);
+        return;
       }
 
       setUser(data.user);
-      toast.success("Account created");
+      toast.success("Account created successfully! 🎉");
+      setName("");
+      setEmail("");
+      setPassword("");
+      router.push("/");
     } catch (err) {
-      toast.error(err?.response?.data?.error || "Registration failed");
+      toast.error(err?.response?.data?.error || "Registration failed. Please try again.");
+      setIsLoading(false);
     }
   };
 
-  if (user) return redirect("/");
+  if (loading) return null;
+  if (user) return null;
 
   return (
-    <div className="login">
-      <h2>Sign Up</h2>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h1 className="auth-title">Sign Up</h1>
+        
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="form-group">
+            <label>Full Name</label>
+            <div className="input-with-icon">
+              <span className="icon">👤</span>
+              <input
+                type="text"
+                placeholder="Type your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                disabled={isLoading}
+              />
+            </div>
+          </div>
 
-      <form onSubmit={registerHandler}>
-        <input
-          type="text"
-          placeholder="Enter Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
+          <div className="form-group">
+            <label>Email</label>
+            <div className="input-with-icon">
+              <span className="icon">✉️</span>
+              <input
+                type="email"
+                placeholder="Type your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={isLoading}
+              />
+            </div>
+          </div>
 
-        <input
-          type="email"
-          placeholder="Enter Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+          <div className="form-group">
+            <label>Password</label>
+            <div className="input-with-icon">
+              <span className="icon">🔒</span>
+              <input
+                type="password"
+                placeholder="Type your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                disabled={isLoading}
+                minLength={6}
+              />
+            </div>
+          </div>
 
-        <input
-          type="password"
-          placeholder="Enter Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+          <button
+            type="submit"
+            className="login-button"
+            disabled={isLoading}
+          >
+            {isLoading ? "Creating..." : "SIGN UP"}
+          </button>
+        </form>
 
-        <button type="submit">Create Account</button>
-
-        <div className="extra-links">
+        <div className="auth-footer">
           <p>
-            Already have an account? <Link href="/login">Log in</Link>
+            Or Sign In Using <Link href="/login">LOGIN</Link>
           </p>
         </div>
-      </form>
+      </div>
     </div>
   );
 };

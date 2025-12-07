@@ -1,46 +1,166 @@
-.header {
+/* NAVBAR - Gintera Inspired Clean Design */
+.navbar {
   width: 100%;
   background: #ffffff;
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid #efefef;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 0;
+}
 
+.navbar-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 3rem;
+  width: 100%;
+}
 
-  .logo {
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: #333;
+/* LOGO */
+.navbar-logo {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #000;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: color 0.3s ease;
+  white-space: nowrap;
+
+  &:hover {
+    color: #667eea;
   }
+}
 
-  .nav {
-    display: flex;
-    align-items: center;
-    gap: 1.2rem;
+/* CENTER NAVIGATION */
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  flex: 1;
 
-    a {
-      font-size: 0.95rem;
-      color: #333;
-      padding: 0.5rem 0.8rem;
-      border-radius: 6px;
-      transition: 0.2s;
-      cursor: pointer;
+  a {
+    font-size: 0.95rem;
+    color: #666;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    white-space: nowrap;
 
-      &:hover {
-        background: #f4f4f4;
-      }
+    &:hover {
+      color: #000;
+    }
+  }
+}
+
+/* RIGHT ACTION SECTION */
+.navbar-action {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+
+  .logout-btn {
+    background: linear-gradient(135deg, #5b7bff 0%, #667eea 100%);
+    color: #ffffff;
+    padding: 0.7rem 1.8rem;
+    border: none;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: none;
+    white-space: nowrap;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
     }
 
-    .logout-btn {
-      background: #ff4d4d;
-      color: #fff;
-      padding: 0.5rem 0.9rem;
-      border-radius: 6px;
+    &:active {
+      transform: translateY(0);
+    }
+  }
 
-      &:hover {
-        background: #e33a3a;
-      }
+  .login-link {
+    background: linear-gradient(135deg, #5b7bff 0%, #667eea 100%);
+    color: #ffffff;
+    padding: 0.7rem 1.8rem;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .navbar-container {
+    padding: 1rem 1.2rem;
+    gap: 1rem;
+  }
+
+  .navbar-logo {
+    font-size: 1.1rem;
+  }
+
+  .navbar-nav {
+    gap: 1.5rem;
+
+    a {
+      font-size: 0.85rem;
+    }
+  }
+
+  .navbar-action {
+    .logout-btn,
+    .login-link {
+      padding: 0.6rem 1.4rem;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-container {
+    padding: 0.9rem 1rem;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+  }
+
+  .navbar-logo {
+    font-size: 1rem;
+    flex: 1;
+  }
+
+  .navbar-nav {
+    display: none;
+  }
+
+  .navbar-action {
+    flex: 1;
+    justify-content: flex-end;
+
+    .logout-btn,
+    .login-link {
+      padding: 0.5rem 1.2rem;
+      font-size: 0.8rem;
     }
   }
 }

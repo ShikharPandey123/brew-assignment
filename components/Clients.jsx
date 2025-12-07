@@ -34,10 +34,11 @@ export const ContextProvider = ({ children }) => {
 
 export const LogoutBtn = () => {
   const { user, setUser } = useContext(Context);
+  const router = useRouter();
 
   const logoutHandler = async () => {
     try {
-      const { data } = await axios.post("/api/auth/logout");
+      const { data } = await axios.get("/api/auth/logout");
 
       if (!data.success) {
         toast.error(data.error || data.message);
@@ -46,6 +47,7 @@ export const LogoutBtn = () => {
 
       setUser(null);
       toast.success("Logged out");
+      router.push("/login");
     } catch (err) {
       toast.error(err?.response?.data?.error || "Logout failed");
     }

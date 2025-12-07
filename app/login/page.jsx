@@ -1,19 +1,30 @@
 "use client";
 
+import "../../styles/login.scss";
 import Link from "next/link";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Context } from "../../components/Clients";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 
 const LoginPage = () => {
-  const { user, setUser } = useContext(Context);
+  const { user, setUser, loading } = useContext(Context);
+  const router = useRouter();
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const loginHandler = async (e) => {
+  useEffect(() => {
+    if (user && !loading) {
+      router.push("/");
+    }
+  }, [user, loading, router]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       const { data } = await axios.post("/api/auth/login", {
@@ -22,47 +33,76 @@ const LoginPage = () => {
       });
 
       if (!data.success) {
-        return toast.error(data.error || data.message);
+        toast.error(data.error || data.message || "Login failed");
+        setIsLoading(false);
+        return;
       }
 
       setUser(data.user);
-      toast.success("Logged in");
+      toast.success("Logged in successfully! 🎉");
+      setEmail("");
+      setPassword("");
+      router.push("/");
     } catch (err) {
-      toast.error(err?.response?.data?.error || "Login failed");
+      toast.error(err?.response?.data?.error || "Login failed. Please try again.");
+      setIsLoading(false);
     }
   };
 
-  if (user) return redirect("/");
+  if (loading) return null;
+  if (user) return null;
 
   return (
-    <div className="login">
-      <h2>Login</h2>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h1 className="auth-title">Login</h1>
+        
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="form-group">
+            <label>Username</label>
+            <div className="input-with-icon">
+              <span className="icon">👤</span>
+              <input
+                type="email"
+                placeholder="Type your username"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={isLoading}
+              />
+            </div>
+          </div>
 
-      <form onSubmit={loginHandler}>
-        <input
-          type="email"
-          placeholder="Enter Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+          <div className="form-group">
+            <label>Password</label>
+            <div className="input-with-icon">
+              <span className="icon">🔒</span>
+              <input
+                type="password"
+                placeholder="Type your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                disabled={isLoading}
+              />
+            </div>
+          </div>
 
-        <input
-          type="password"
-          placeholder="Enter Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+          <button
+            type="submit"
+            className="login-button"
+            disabled={isLoading}
+          >
+            {isLoading ? "Loading..." : "LOGIN"}
+          </button>
+        </form>
 
-        <button type="submit">Login</button>
-
-        <div className="extra-links">
+        <div className="auth-footer">
           <p>
-            New here? <Link href="/register">Create an account</Link>
+            Or Sign Up Using <Link href="/register">SIGN UP</Link>
           </p>
         </div>
-      </form>
+      </div>
     </div>
   );
 };
