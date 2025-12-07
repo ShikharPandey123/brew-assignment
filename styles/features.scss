@@ -1,0 +1,56 @@
+$color-bg: #f5f5f5;
+$color-text: #333;
+$color-primary: #7d5fff;
+$color-danger: #ff4d4d;
+$color-white: #fff;
+$font-primary: "Roboto", sans-serif;
+
+
+@mixin flex($direction: row, $align: center, $justify: flex-start, $gap: 1rem) {
+  display: flex;
+  flex-direction: $direction;
+  align-items: $align;
+  justify-content: $justify;
+  gap: $gap;
+}
+
+@mixin input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: $font-primary;
+  outline: none;
+
+  &:focus {
+    border-color: $color-primary;
+    box-shadow: 0 0 0 2px rgba(125, 95, 255, 0.2);
+  }
+}
+
+@mixin btn($bg: $color-primary, $color: $color-white) {
+  padding: 0.7rem 1.3rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background: $bg;
+  color: $color;
+  font-size: 0.95rem;
+  transition: 0.2s;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+@mixin hidescrollbar {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
