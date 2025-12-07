@@ -1,10 +1,14 @@
 import "../styles/app.scss";
+import "../styles/header.scss";
 import Header from "./header";
 import { ContextProvider } from "../components/Clients";
 
 export const metadata = {
-  title: "TaskTrackr",
-  description: "This is a Todo App made with Next.js",
+  title: "TaskManager",
+  description: "Task management app built with Next.js",
+  icons: {
+    icon: "/fav.ico",
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -12,10 +16,8 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <ContextProvider>
-          <>
-            <Header />
-            {children}
-          </>
+          <Header />
+          <main className="page-content">{children}</main>
         </ContextProvider>
       </body>
     </html>
